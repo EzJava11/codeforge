@@ -55,8 +55,13 @@ function App() {
     }
   ]
 
-  const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [answers, setAnswers] = useState([])
+
   const [currentQuestion, setCurrentQuestion] = useState(0)
+
+  const [score, setScore] = useState(null)
+
+  const [showResults, setShowResults] = useState(false)
 
   return (
     <>
@@ -68,31 +73,50 @@ function App() {
           questions[currentQuestion].options.map((option, index) => {
             return <li style={{ listStyleType: 'none' }} key={option}>
               <label>
-                <input type="radio" name="answer" onChange={() => {
-                  setSelectedAnswer(index)
-                }} />
+                <input type="radio" name="answer"
+                  onChange={() => {
+                    const newAnswers = [...answers]
+                    newAnswers[currentQuestion] = index
+                    setAnswers(newAnswers)
+                  }}
+                  checked={index === answers[currentQuestion]}
+                />
                 {option}
               </label>
             </li>
           })
         }
       </ul>
-      <p>Respuesta Seleccionada: {selectedAnswer !== null && selectedAnswer + 1}</p>
+      <p>Respuesta Seleccionada: {answers[currentQuestion] !== undefined && answers[currentQuestion] + 1}</p>
 
       <input type="button" value="Anterior" onClick={() => {
-        if(currentQuestion !== 0){
-          setCurrentQuestion(currentQuestion-1)
-          setSelectedAnswer(null)
+        if (currentQuestion !== 0) {
+          setCurrentQuestion(currentQuestion - 1)
+          setShowResults(false)
         }
-      }}/>
-      
+      }} />
+
       <input type="button" value="Siguiente" onClick={() => {
-        if(currentQuestion < questions.length-1){
-          setCurrentQuestion(currentQuestion+1)
-          setSelectedAnswer(null)
+        if (currentQuestion < questions.length - 1) {
+          setCurrentQuestion(currentQuestion + 1)
         }
-      }}/>
-      
+      }} />
+      <br />
+      {currentQuestion === questions.length - 1 &&
+        <input type="button" value="Finalizar" onClick={() => {
+          
+          let score = 0
+
+          for(let i = 0; i < questions.length; i++){
+            if(answers[i] === questions[i].correctAnswer){
+              score++
+            }
+          }
+          setScore(score)
+          setShowResults(true)
+        }} />
+      }
+      {showResults && <p>Puntuación: {score}/{questions.length}</p>}
     </>
   )
 }
