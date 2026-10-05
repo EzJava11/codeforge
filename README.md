@@ -1,2 +1,7 @@
-# codeforge
-A programming practice platform that tracks your skills through real coding challenges and performance data.
+# CodeForge
+
+A programming practice platform for solving coding challenges, tracking skill proficiency, and identifying areas for improvement.
+
+## Status
+
+🚧 Early development
